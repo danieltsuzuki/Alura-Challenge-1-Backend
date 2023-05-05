@@ -1,32 +1,43 @@
-package br.com.estudo.alurachallengebackendsemana1.controller;
+package br.com.estudo.alurachallengebackendsemana1.controllers;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
+import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/videos")
 public class VideoController {
 
     @Autowired
-    VideoService service;
+    private VideoService service;
 
-    @PostMapping()
+    @Autowired
+    private VideoRepository repository;
+
+    @PostMapping
     @Transactional
-    public ResponseEntity<Video> post(@RequestBody Video video, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Video> post(@RequestBody @Valid Video video, UriComponentsBuilder uriBuilder) {
         service.save(video);
 
         URI uri = uriBuilder.path("/{id}").buildAndExpand(video.getId()).toUri();
 
         return ResponseEntity.created(uri).body(video);
     }
+
+    @GetMapping
+    public ResponseEntity getAll(){
+        var videos = repository.findAll();
+        return ResponseEntity.ok().body(videos);
+    }
+
 }
