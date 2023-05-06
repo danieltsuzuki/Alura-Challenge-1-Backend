@@ -1,5 +1,6 @@
 package br.com.estudo.alurachallengebackendsemana1.domain.entities;
 
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOInsert;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,4 +19,10 @@ public class Video {
     private String title;
     private String description;
     private String url;
+
+    public Video(VideoDTOInsert video){
+        this.url = video.getUrl();
+        this.title = video.getTitle();
+        this.description = video.getDescription();
+    }
 }
