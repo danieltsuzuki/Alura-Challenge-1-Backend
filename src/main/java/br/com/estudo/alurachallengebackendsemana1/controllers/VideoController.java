@@ -1,6 +1,7 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
 import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
 import jakarta.transaction.Transactional;
@@ -21,9 +22,6 @@ public class VideoController {
     @Autowired
     private VideoService service;
 
-    @Autowired
-    private VideoRepository repository;
-
     @PostMapping
     @Transactional
     public ResponseEntity<Video> post(@RequestBody @Valid Video video, UriComponentsBuilder uriBuilder) {
@@ -35,9 +33,16 @@ public class VideoController {
     }
 
     @GetMapping
-    public ResponseEntity getAll(){
-        var videos = repository.findAll();
+    public ResponseEntity<List<Video>> getAll(){
+        var videos = service.findAll();
         return ResponseEntity.ok().body(videos);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<VideoDTO> findById(@PathVariable Long id){
+        VideoDTO videoDTO = new VideoDTO(service.findById(id));
+
+        return ResponseEntity.ok().body(videoDTO);
     }
 
 }
