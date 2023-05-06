@@ -2,18 +2,23 @@ package br.com.estudo.alurachallengebackendsemana1.controllers;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOInsert;
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOList;
 import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.BadRequestException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/videos")
@@ -24,18 +29,19 @@ public class VideoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Video> post(@RequestBody @Valid Video video, UriComponentsBuilder uriBuilder) {
-        service.save(video);
+    public ResponseEntity<VideoDTOInsert> post(@RequestBody @Valid VideoDTOInsert videoDTO, UriComponentsBuilder uriBuilder) {
+        Video videoInsert = service.save(new Video(videoDTO));
+        URI uri = uriBuilder.path("/{id}").buildAndExpand(videoInsert.getId()).toUri();
 
-        URI uri = uriBuilder.path("/{id}").buildAndExpand(video.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(video);
+        return ResponseEntity.created(uri).body(videoDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<Video>> getAll(){
-        var videos = service.findAll();
-        return ResponseEntity.ok().body(videos);
+    public ResponseEntity<List<VideoDTOList>> getAll(){
+        List<Video> videos = service.findAll();
+        List<VideoDTOList> videosDTO = videos.stream().map(VideoDTOList::new).collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(videosDTO);
     }
 
     @GetMapping(value = "/{id}")
