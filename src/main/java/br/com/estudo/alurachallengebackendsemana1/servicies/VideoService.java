@@ -2,7 +2,10 @@ package br.com.estudo.alurachallengebackendsemana1.servicies;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.BadRequestException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +35,23 @@ public class VideoService {
     public void delete(Long id){
         Video video = findById(id);
         video.setActive(false);
+    }
+
+    public Video update(Long id, VideoDTOUpdate videoDTOUpdate){
+        Video videoOld = findById(id);
+
+        if (videoDTOUpdate.getDescription() != null){
+            videoOld.setDescription(videoDTOUpdate.getDescription());
+        }
+
+        if (videoDTOUpdate.getTitle() != null){
+            videoOld.setTitle(videoDTOUpdate.getTitle());
+        }
+
+        if (videoDTOUpdate.getDescription() == null && videoDTOUpdate.getTitle() == null){
+            throw new AtLeastOneFieldNeedToBeFillException("Resource not update, at least one field need to be fill");
+        }
+
+        return repository.save(videoOld);
     }
 }
