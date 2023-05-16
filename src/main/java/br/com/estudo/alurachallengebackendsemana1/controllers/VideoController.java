@@ -4,6 +4,7 @@ import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOInsert;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOList;
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,14 @@ public class VideoController {
         service.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    @Transactional
+    public ResponseEntity update(@PathVariable Long id, @RequestBody VideoDTOUpdate videoDTOUpdate){
+        Video videoUpdated = service.update(id ,videoDTOUpdate);
+
+        return ResponseEntity.ok(videoUpdated);
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers.exception;
 
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,13 @@ public class ExceptionTreatment {
         StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Bad request",
                 errorMessages.toString(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(AtLeastOneFieldNeedToBeFillException.class)
+    public ResponseEntity<StandardError> notFound(AtLeastOneFieldNeedToBeFillException e, HttpServletRequest request) {
+        StandardError sError = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Bad request",
+                e.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(sError);
     }
 }
