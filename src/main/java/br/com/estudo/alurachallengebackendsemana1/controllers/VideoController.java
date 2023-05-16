@@ -1,10 +1,10 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOInsert;
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOList;
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOUpdate;
+import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTO;
+import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOInsert;
+import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOList;
+import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/videos")
+@RequestMapping(value = "/video")
 public class VideoController {
 
     @Autowired

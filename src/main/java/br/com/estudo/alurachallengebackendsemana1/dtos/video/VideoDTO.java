@@ -1,4 +1,4 @@
-package br.com.estudo.alurachallengebackendsemana1.dtos;
+package br.com.estudo.alurachallengebackendsemana1.dtos.video;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import lombok.Getter;

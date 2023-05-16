@@ -1,11 +1,9 @@
 package br.com.estudo.alurachallengebackendsemana1.servicies;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOUpdate;
+import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
-import br.com.estudo.alurachallengebackendsemana1.servicies.exception.BadRequestException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
