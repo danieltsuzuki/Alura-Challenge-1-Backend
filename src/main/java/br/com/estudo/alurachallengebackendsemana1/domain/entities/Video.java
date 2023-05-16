@@ -1,6 +1,6 @@
 package br.com.estudo.alurachallengebackendsemana1.domain.entities;
 
-import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOInsert;
+import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOInsert;
 import jakarta.persistence.*;
 import lombok.*;
 
