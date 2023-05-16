@@ -4,15 +4,11 @@ import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOInsert;
 import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTOList;
-import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
-import br.com.estudo.alurachallengebackendsemana1.servicies.exception.BadRequestException;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -37,7 +33,7 @@ public class VideoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VideoDTOList>> getAll(){
+    public ResponseEntity<List<VideoDTOList>> getAll() {
         List<Video> videos = service.findAll();
         List<VideoDTOList> videosDTO = videos.stream().map(VideoDTOList::new).collect(Collectors.toList());
 
@@ -45,10 +41,18 @@ public class VideoController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<VideoDTO> findById(@PathVariable Long id){
+    public ResponseEntity<VideoDTO> findById(@PathVariable Long id) {
         VideoDTO videoDTO = new VideoDTO(service.findById(id));
 
         return ResponseEntity.ok().body(videoDTO);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @Transactional
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
