@@ -1,6 +1,7 @@
 package br.com.estudo.alurachallengebackendsemana1.servicies;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
+import br.com.estudo.alurachallengebackendsemana1.dtos.VideoDTO;
 import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,16 @@ public class VideoService {
     }
 
     public List<Video> findAll() {
-        return repository.findAll();
+        return repository.findAllByActiveTrue();
     }
 
     public Video findById(Long id) {
-        Optional<Video> video = repository.findById(id);
+        Optional<Video> video = repository.findByIdAndActiveTrue(id);
         return video.orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+    }
+
+    public void delete(Long id){
+        Video video = findById(id);
+        video.setActive(false);
     }
 }

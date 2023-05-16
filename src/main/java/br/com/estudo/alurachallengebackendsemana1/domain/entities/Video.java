@@ -19,8 +19,9 @@ public class Video {
     private String title;
     private String description;
     private String url;
+    private Boolean active = true;
 
-    public Video(VideoDTOInsert video){
+    public Video(VideoDTOInsert video) {
         this.url = video.getUrl();
         this.title = video.getTitle();
         this.description = video.getDescription();
