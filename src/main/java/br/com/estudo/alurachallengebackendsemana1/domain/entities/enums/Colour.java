@@ -1,7 +1,7 @@
 package br.com.estudo.alurachallengebackendsemana1.domain.entities.enums;
 
 public enum Colour {
-    RED,
+    RED ,
     ORANGE,
     YELLOW,
     GREEN,
