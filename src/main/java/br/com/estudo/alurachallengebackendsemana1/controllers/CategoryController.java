@@ -36,4 +36,11 @@ public class CategoryController {
 
         return ResponseEntity.created(uri).body(categoryDTO);
     }
+
+    @DeleteMapping(value = "/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
