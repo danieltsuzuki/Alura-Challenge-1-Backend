@@ -22,4 +22,9 @@ public class CategoryService {
     public Category save(Category category){
         return repository.save(category);
     }
+
+    public void delete(Long id){
+        Category category = findById(id);
+        repository.delete(category);
+    }
 }
