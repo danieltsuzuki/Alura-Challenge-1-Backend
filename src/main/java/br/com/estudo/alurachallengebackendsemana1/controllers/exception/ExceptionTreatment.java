@@ -1,10 +1,12 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers.exception;
 
+import br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +42,13 @@ public class ExceptionTreatment {
     public ResponseEntity<StandardError> notFound(AtLeastOneFieldNeedToBeFillException e, HttpServletRequest request) {
         StandardError sError = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Bad request",
                 e.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(sError);
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<StandardError> notFound(HttpMessageNotReadableException e, HttpServletRequest request) {
+        StandardError sError = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Bad request",
+                "Eligible colours: RED, INDIGO, GREEN, YELLOW, BLUE, ORANGE, VIOLET", request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(sError);
     }

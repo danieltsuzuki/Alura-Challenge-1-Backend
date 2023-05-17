@@ -18,4 +18,8 @@ public class CategoryService {
         Optional<Category> category = repository.findById(id);
         return category.orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
     }
+
+    public Category save(Category category){
+        return repository.save(category);
+    }
 }
