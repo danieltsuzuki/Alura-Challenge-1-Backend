@@ -1,9 +1,9 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Category;
-import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTO;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOInsert;
+import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.servicies.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/category")
@@ -39,8 +40,23 @@ public class CategoryController {
 
     @DeleteMapping(value = "/{id}")
     @Transactional
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<CategoryDTO> list = service.findAll().stream().map(category -> new CategoryDTO(category)).toList();
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping(value = "/{id}")
+    @Transactional
+    public ResponseEntity update(@PathVariable Long id, @RequestBody CategoryDTOUpdate categoryDTO) {
+        Category category = service.update(id, categoryDTO);
+
+        return ResponseEntity.ok(category);
     }
 }
