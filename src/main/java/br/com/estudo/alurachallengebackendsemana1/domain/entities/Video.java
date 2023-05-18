@@ -1,5 +1,6 @@
 package br.com.estudo.alurachallengebackendsemana1.domain.entities;
 
+import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOSimple;
 import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOInsert;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,6 +21,9 @@ public class Video {
     private String description;
     private String url;
     private Boolean active = true;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Video(VideoDTOInsert video) {
         this.url = video.getUrl();
