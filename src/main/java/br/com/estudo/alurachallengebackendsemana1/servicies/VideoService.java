@@ -18,6 +18,9 @@ public class VideoService {
     VideoRepository repository;
 
     public Video save(Video video) {
+        if (video.getCategory() == null || video.getCategory().getId() == null) {
+            video.getCategory().setId(1L);
+        }
         return repository.save(video);
     }
 
