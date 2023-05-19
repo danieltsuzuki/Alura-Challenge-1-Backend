@@ -30,7 +30,7 @@ public class VideoController {
         Video videoInsert = service.save(new Video(videoDTO));
         URI uri = uriBuilder.path("/{id}").buildAndExpand(videoInsert.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(videoDTO);
+        return ResponseEntity.created(uri).body(new VideoDTOInsert(videoInsert));
     }
 
     @GetMapping
@@ -58,8 +58,8 @@ public class VideoController {
 
     @PutMapping(value = "/{id}")
     @Transactional
-    public ResponseEntity update(@PathVariable Long id, @RequestBody VideoDTOUpdate videoDTOUpdate){
-        Video videoUpdated = service.update(id ,videoDTOUpdate);
+    public ResponseEntity update(@PathVariable Long id, @RequestBody VideoDTOUpdate videoDTOUpdate) {
+        Video videoUpdated = service.update(id, videoDTOUpdate);
 
         return ResponseEntity.ok(videoUpdated);
     }

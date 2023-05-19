@@ -3,6 +3,7 @@ package br.com.estudo.alurachallengebackendsemana1.domain.entities;
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTO;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOInsert;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private Colour colour;
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Video> list = new ArrayList<>();
 
     public Category(CategoryDTOInsert category) {
