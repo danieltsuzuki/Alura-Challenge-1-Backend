@@ -1,10 +1,7 @@
 package br.com.estudo.alurachallengebackendsemana1.dtos.video;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
-import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTO;
-import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOSimple;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,12 +22,12 @@ public class VideoDTOInsert {
     @Length(max = 255)
     @URL
     private String url;
-    private CategoryDTO category;
+    private Long categoryId;
 
-    public VideoDTOInsert(Video video){
+    public VideoDTOInsert(Video video) {
         this.title = video.getTitle();
         this.description = video.getDescription();
         this.url = video.getUrl();
-        this.category = new CategoryDTO(video.getCategory());
+        this.categoryId = video.getCategory().getId();
     }
 }

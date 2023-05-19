@@ -1,6 +1,5 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers.exception;
 
-import br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -28,7 +28,7 @@ public class ExceptionTreatment {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> badRequest(MethodArgumentNotValidException e,
-                                                                               HttpServletRequest request) {
+                                                    HttpServletRequest request) {
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         List<String> errorMessages = fieldErrors.stream()
                 .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
@@ -45,6 +45,7 @@ public class ExceptionTreatment {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(sError);
     }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<StandardError> notFound(HttpMessageNotReadableException e, HttpServletRequest request) {
         StandardError sError = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Bad request",
@@ -52,4 +53,14 @@ public class ExceptionTreatment {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(sError);
     }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<StandardError> notFound(NoSuchElementException e, HttpServletRequest request) {
+        StandardError sError = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "No such element",
+                "Category not exists, check all categories", request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(sError);
+
+    }
+
 }
