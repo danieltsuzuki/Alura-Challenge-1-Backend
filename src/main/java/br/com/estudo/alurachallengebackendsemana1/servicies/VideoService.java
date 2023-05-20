@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -58,6 +57,15 @@ public class VideoService {
         }
 
         return repository.save(videoOld);
+    }
+
+    public List<Video> findByTitle(String title) {
+        List<Video> list = repository.findByTitleContaining(title);
+
+        if (list.isEmpty()){
+            throw new ResourceNotFoundException("Resource not found");
+        }
+        return list;
     }
 
     private Video checkCategory(Video video) {

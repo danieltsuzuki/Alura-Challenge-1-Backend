@@ -64,4 +64,11 @@ public class VideoController {
         return ResponseEntity.ok(videoUpdated);
     }
 
+    @GetMapping(value = "/")
+    public ResponseEntity<List<VideoDTO>> findByTitle(@RequestParam("search") String title){
+        List<VideoDTO> list = service.findByTitle(title).stream().map(VideoDTO::new).collect(Collectors.toList());
+
+        return ResponseEntity.ok(list);
+    }
+
 }
