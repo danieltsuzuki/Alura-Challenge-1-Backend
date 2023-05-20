@@ -11,9 +11,15 @@ import java.util.Optional;
 public interface VideoRepository extends JpaRepository<Video, Long> {
 
     Optional<Video> findByIdAndActiveTrue(Long id);
+
     @Query()
     List<Video> findAllByActiveTrue();
 
+
+    @Query(value = "SELECT * FROM videos WHERE category_id = :categoryId AND active = true",nativeQuery = true)
+    List<Video> findAllByCategoryIdAndActiveTrue(@Param("categoryId") Long id);
+
     @Query(value = "SELECT * FROM videos WHERE title LIKE %:title% ",nativeQuery = true)
     List<Video> findByTitleContaining(@Param("title") String title);
+
 }
