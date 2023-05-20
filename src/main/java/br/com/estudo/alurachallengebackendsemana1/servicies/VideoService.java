@@ -23,7 +23,6 @@ public class VideoService {
     CategoryRepository categoryRepository;
 
     public Video save(Video video) {
-
         return repository.save(checkCategory(video));
     }
 
