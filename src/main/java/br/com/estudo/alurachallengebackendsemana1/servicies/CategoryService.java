@@ -1,8 +1,10 @@
 package br.com.estudo.alurachallengebackendsemana1.servicies;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Category;
+import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.repositories.CategoryRepository;
+import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
+
+    @Autowired
+    private VideoRepository videoRepository;
 
     public Category findById(Long id) {
         Optional<Category> category = repository.findById(id);
@@ -47,5 +52,13 @@ public class CategoryService {
             throw  new AtLeastOneFieldNeedToBeFillException("Resource not update, at least one field need to be fill");
         }
         return repository.save(oldCategory);
+    }
+
+    public List<Video> findAllVideosByCategory(Long id){
+        List<Video> list = videoRepository.findAllByCategoryIdAndActiveTrue(id);
+        if (list.isEmpty()){
+            throw new ResourceNotFoundException("This category doesn't exists, please check the existing categories");
+        }
+        return list;
     }
 }

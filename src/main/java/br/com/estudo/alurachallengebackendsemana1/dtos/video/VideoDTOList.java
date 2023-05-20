@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,9 +16,12 @@ public class VideoDTOList {
 
     private String url;
 
-    public VideoDTOList(Video video){
+    private Long categoryId;
+
+    public VideoDTOList(Video video) {
         this.id = video.getId();
         this.title = video.getTitle();
         this.url = video.getUrl();
+        this.categoryId = video.getCategory().getId();
     }
 }
