@@ -55,10 +55,11 @@ public class CategoryService {
     }
 
     public List<Video> findAllVideosByCategory(Long id){
-        List<Video> list = videoRepository.findAllByCategoryIdAndActiveTrue(id);
-        if (list.isEmpty()){
+        Optional<Category> category = repository.findById(id);
+        if (category.get() == null){
             throw new ResourceNotFoundException("This category doesn't exists, please check the existing categories");
         }
-        return list;
+
+        return videoRepository.findAllByCategoryIdAndActiveTrue(id);
     }
 }
