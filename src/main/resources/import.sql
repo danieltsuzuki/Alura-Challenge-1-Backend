@@ -5,4 +5,4 @@ INSERT INTO videos (id, title, description, url, category_id, active) VALUES (1,
 INSERT INTO videos (id, title, description, url, category_id, active) VALUES (2, 'Lucas Neto for big ones', 'Content for teenagers', 'http://url.com.br', 1, 1);
 INSERT INTO videos (id, title, description, url, category_id, active) VALUES (3, 'Game play Valorant', 'Pro player content', 'http://url.com.br', 2, 1);
 INSERT INTO videos (id, title, description, url, category_id, active) VALUES (4, 'Game play Dota', 'Noob player content', 'http://url.com.br', 2, 1);
-INSERT INTO videos (id, title, description, url, category_id, active) VALUES (4, 'Video Test', 'Test', 'http://url.com.br', 2, 0);
+INSERT INTO videos (id, title, description, url, category_id, active) VALUES (5, 'Video Test', 'Test', 'http://url.com.br', 2, 0);
