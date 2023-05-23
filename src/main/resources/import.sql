@@ -1,5 +1,6 @@
 INSERT INTO categories (id, title, colour) VALUES (1, 'Free', 'RED');
 INSERT INTO categories (id, title, colour) VALUES (2, 'Games', 'GREEN');
+INSERT INTO categories (id, title, colour) VALUES (3, 'Movies', 'YELLOW');
 
 INSERT INTO videos (id, title, description, url, category_id, active) VALUES (1, 'Lucas Neto for little ones', 'Content for children', 'http://url.com.br', 1, 1);
 INSERT INTO videos (id, title, description, url, category_id, active) VALUES (2, 'Lucas Neto for big ones', 'Content for teenagers', 'http://url.com.br', 1, 1);

@@ -6,6 +6,7 @@ import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOUpdat
 import br.com.estudo.alurachallengebackendsemana1.repositories.CategoryRepository;
 import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.BadRequestException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class CategoryService {
 
     public void delete(Long id) {
         Category category = findById(id);
+        if (category.getList().size() >= 1 || category.getId() == 1) {
+            throw new BadRequestException("Can't delete a category with videos or category 'Free' ");
+        }
         repository.delete(category);
     }
 
@@ -48,17 +52,14 @@ public class CategoryService {
         if (category.getTitle() != null) {
             oldCategory.setTitle(category.getTitle());
         }
-        if (category.getTitle() == null && category.getColour() == null){
-            throw  new AtLeastOneFieldNeedToBeFillException("Resource not update, at least one field need to be fill");
+        if (category.getTitle() == null && category.getColour() == null) {
+            throw new AtLeastOneFieldNeedToBeFillException("Resource not update, at least one field need to be fill");
         }
         return repository.save(oldCategory);
     }
 
-    public List<Video> findAllVideosByCategory(Long id){
-        Optional<Category> category = repository.findById(id);
-        if (category.get() == null){
-            throw new ResourceNotFoundException("This category doesn't exists, please check the existing categories");
-        }
+    public List<Video> findAllVideosByCategory(Long id) {
+        Category category = findById(id);
 
         return videoRepository.findAllByCategoryIdAndActiveTrue(id);
     }

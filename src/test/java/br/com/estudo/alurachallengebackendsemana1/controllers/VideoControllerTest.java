@@ -7,8 +7,6 @@ import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOInsert;
 import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOList;
 import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
-import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,9 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VideoControllerTest {
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     private VideoService service;
