@@ -1,11 +1,15 @@
 package br.com.estudo.alurachallengebackendsemana1.controllers;
 
 import br.com.estudo.alurachallengebackendsemana1.domain.entities.Category;
+import br.com.estudo.alurachallengebackendsemana1.domain.entities.Video;
+import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTO;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOInsert;
 import br.com.estudo.alurachallengebackendsemana1.dtos.category.CategoryDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.servicies.CategoryService;
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,8 +21,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour.*;
+import java.util.List;
+
+import static br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour.GREEN;
+import static br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour.YELLOW;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
@@ -28,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class CategoryControllerTest {
     @Autowired
     private MockMvc mvc;
-    @Autowired
+    @Mock
     private CategoryService categoryService;
     @Autowired
     private JacksonTester<CategoryDTOInsert> categoryDTOInsertJSON;
@@ -145,5 +153,66 @@ class CategoryControllerTest {
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    @DisplayName("It should return http code 200")
+    void findAll() throws Exception {
+        List<CategoryDTO> list = categoryService.findAll().stream().map(CategoryDTO::new).toList();
+
+        var response = mvc.perform(get("/category"))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+
+    @Test
+    @DisplayName("It should return http code 200 when the information is valid")
+    void getAllVideosByCategoryCase1() throws Exception {
+        Long id = 1L;
+        List<Video> list = categoryService.findAllVideosByCategory(id);
+
+        var response = mvc.perform(get("/category/{i}/videos", id))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("It should return http code 404 when the information is not valid")
+    void getAllVideosByCategoryCase2() throws Exception {
+        Long id = 999999999L;
+        when(categoryService.findAllVideosByCategory(id)).thenThrow(new ResourceNotFoundException("Resource not found"));
+
+        var response = mvc.perform(get("/category/{i}/videos", id))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    @DisplayName("It should return http code 204 when the category could be deleted")
+    @Transactional
+    void deleteCase1() throws Exception {
+        Long id = 3L;
+
+        var response = mvc.perform(delete("/category/{i}", id))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+
+    @Test
+    @DisplayName("It should return http code 400 when the category couldn't be deleted")
+    @Transactional
+    void deleteCase2() throws Exception {
+        Long id = 1L;
+
+        var response = mvc.perform(delete("/category/{i}", id))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }
