@@ -15,13 +15,13 @@ import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour.GREEN;
 import static br.com.estudo.alurachallengebackendsemana1.domain.entities.enums.Colour.YELLOW;
@@ -158,7 +158,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("It should return http code 200")
     void findAll() throws Exception {
-        List<CategoryDTO> list = categoryService.findAll().stream().map(CategoryDTO::new).toList();
+        Pageable pageable = Pageable.ofSize(1);
 
         var response = mvc.perform(get("/category"))
                 .andReturn().getResponse();
@@ -171,7 +171,8 @@ class CategoryControllerTest {
     @DisplayName("It should return http code 200 when the information is valid")
     void getAllVideosByCategoryCase1() throws Exception {
         Long id = 1L;
-        List<Video> list = categoryService.findAllVideosByCategory(id);
+        Pageable pageable = Pageable.ofSize(1);
+        Page<Video> list = categoryService.findAllVideosByCategory(id, pageable);
 
         var response = mvc.perform(get("/category/{i}/videos", id))
                 .andReturn().getResponse();
@@ -183,7 +184,8 @@ class CategoryControllerTest {
     @DisplayName("It should return http code 404 when the information is not valid")
     void getAllVideosByCategoryCase2() throws Exception {
         Long id = 999999999L;
-        when(categoryService.findAllVideosByCategory(id)).thenThrow(new ResourceNotFoundException("Resource not found"));
+        Pageable pageable = Pageable.ofSize(1);
+        when(categoryService.findAllVideosByCategory(id, pageable)).thenThrow(new ResourceNotFoundException("Resource not found"));
 
         var response = mvc.perform(get("/category/{i}/videos", id))
                 .andReturn().getResponse();

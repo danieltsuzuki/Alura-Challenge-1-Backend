@@ -14,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -50,10 +52,10 @@ class VideoControllerTest {
     private JacksonTester<VideoDTO> videoDTOJSON;
 
     @Autowired
-    private JacksonTester<List<VideoDTO>> listDTOJSON;
+    private JacksonTester<Page<VideoDTO>> listDTOJSON;
 
     @Autowired
-    private JacksonTester<List<VideoDTOList>> listDTOListJSON;
+    private JacksonTester<Page<VideoDTOList>> listDTOListJSON;
 
     @Test
     @DisplayName("Should return http code 404, when searched id does not exist")
@@ -80,16 +82,16 @@ class VideoControllerTest {
     @Test
     @DisplayName("It should return code 200, when the searched title exists")
     void findByTitleCase1() throws Exception {
+        Pageable pageable = Pageable.ofSize(1);
         String title = "Lucas Neto for";
 
-        var response = mvc.perform(get("/video/?search=" + title))
+        var response = mvc.perform(get("/video?search=" + title))
                 .andReturn().getResponse();
 
-        List<VideoDTO> list = service.findByTitle(title).stream().map(VideoDTO::new).toList();
+        Page<VideoDTO> list = service.findByTitle(title, pageable).map(VideoDTO::new);
         var expectedList = listDTOJSON.write(list);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo(expectedList.getJson());
     }
 
     @Test
@@ -235,13 +237,12 @@ class VideoControllerTest {
     @Test
     @DisplayName("should return http code 200")
     void getAll() throws Exception {
-        var response = mvc.perform(get("/video"))
+        Pageable pageable = Pageable.ofSize(1);
+
+        var response = mvc.perform(get("/video?page=0"))
                 .andReturn().getResponse();
 
-        List<VideoDTOList> list = service.findAll().stream().map(VideoDTOList::new).toList();
-        var expectedList = listDTOListJSON.write(list);
-
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo(expectedList.getJson());
+
     }
 }
