@@ -9,6 +9,8 @@ import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOne
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.BadRequestException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +42,8 @@ public class CategoryService {
         repository.delete(category);
     }
 
-    public List<Category> findAll() {
-        return repository.findAll();
+    public Page<Category> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Category update(Long id, CategoryDTOUpdate category) {
@@ -58,9 +60,9 @@ public class CategoryService {
         return repository.save(oldCategory);
     }
 
-    public List<Video> findAllVideosByCategory(Long id) {
+    public Page<Video> findAllVideosByCategory(Long id,Pageable pageable) {
         Category category = findById(id);
 
-        return videoRepository.findAllByCategoryIdAndActiveTrue(id);
+        return videoRepository.findAllByCategoryIdAndActiveTrue(id, pageable);
     }
 }

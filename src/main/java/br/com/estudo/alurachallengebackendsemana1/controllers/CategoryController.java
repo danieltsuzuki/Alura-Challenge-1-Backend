@@ -8,14 +8,15 @@ import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOList;
 import br.com.estudo.alurachallengebackendsemana1.servicies.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/category")
@@ -32,7 +33,8 @@ public class CategoryController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<CategoryDTOInsert> post(@RequestBody @Valid CategoryDTOInsert categoryDTO, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<CategoryDTOInsert> post(@RequestBody @Valid CategoryDTOInsert categoryDTO,
+                                                  UriComponentsBuilder uriBuilder) {
         Category categoryInsert = service.save(new Category(categoryDTO));
 
         URI uri = uriBuilder.path("/{id}").buildAndExpand(categoryInsert.getId()).toUri();
@@ -48,8 +50,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> findAll() {
-        List<CategoryDTO> list = service.findAll().stream().map(category -> new CategoryDTO(category)).toList();
+    public ResponseEntity<Page<CategoryDTO>> findAll(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
+        Page<CategoryDTO> list = service.findAll(pageable).map(CategoryDTO::new);
 
         return ResponseEntity.ok(list);
     }
@@ -63,9 +65,10 @@ public class CategoryController {
     }
 
     @GetMapping(value = "/{id}/videos")
-    public ResponseEntity<List<VideoDTOList>> getAllVideosByCategory(@PathVariable Long id) {
-        List<VideoDTOList> list = service.findAllVideosByCategory(id).stream()
-                .map(video -> new VideoDTOList(video)).collect(Collectors.toList());
+    public ResponseEntity<Page<VideoDTOList>> getAllVideosByCategory(
+            @PageableDefault(size = 5, sort = "title") Pageable pageable, @PathVariable Long id) {
+
+        Page<VideoDTOList> list = service.findAllVideosByCategory(id, pageable).map(VideoDTOList::new);
 
         return ResponseEntity.ok(list);
     }

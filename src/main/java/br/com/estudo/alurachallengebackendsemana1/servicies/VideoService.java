@@ -8,9 +8,10 @@ import br.com.estudo.alurachallengebackendsemana1.repositories.VideoRepository;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.AtLeastOneFieldNeedToBeFillException;
 import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,8 @@ public class VideoService {
         return repository.save(checkCategory(video));
     }
 
-    public List<Video> findAll() {
-        return repository.findAllByActiveTrue();
+    public Page<Video> findAll(Pageable pageable) {
+        return repository.findAllByActiveTrue(pageable);
     }
 
     public Video findById(Long id) {
@@ -58,10 +59,10 @@ public class VideoService {
         return repository.save(videoOld);
     }
 
-    public List<Video> findByTitle(String title) {
-        List<Video> list = repository.findByTitleContaining(title);
+    public Page<Video> findByTitle(String title, Pageable pageable) {
+        Page<Video> list = repository.findByTitleContaining(title, pageable);
 
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             throw new ResourceNotFoundException("Resource not found");
         }
         return list;
