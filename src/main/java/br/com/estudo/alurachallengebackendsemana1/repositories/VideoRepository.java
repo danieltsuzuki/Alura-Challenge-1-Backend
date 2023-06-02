@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface VideoRepository extends JpaRepository<Video, Long> {
@@ -21,5 +22,8 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     @Query(value = "SELECT * FROM videos WHERE title LIKE %:title% ", nativeQuery = true)
     Page<Video> findByTitleContaining(@Param("title") String title, Pageable pageable);
+
+    @Query(value = "SELECT * FROM videos WHERE category_id = 1 AND active = true ORDER BY id DESC LIMIT 5", nativeQuery = true)
+    List<Video> findByFree();
 
 }
