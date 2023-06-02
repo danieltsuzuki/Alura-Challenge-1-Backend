@@ -6,6 +6,7 @@ import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOInsert;
 import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOList;
 import br.com.estudo.alurachallengebackendsemana1.dtos.video.VideoDTOUpdate;
 import br.com.estudo.alurachallengebackendsemana1.servicies.VideoService;
+import br.com.estudo.alurachallengebackendsemana1.servicies.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/video")
@@ -70,6 +74,16 @@ public class VideoController {
         Video videoUpdated = service.update(id, videoDTOUpdate);
 
         return ResponseEntity.ok(videoUpdated);
+    }
+
+    @GetMapping(value = "/free")
+    public ResponseEntity free(){
+        List<VideoDTO> videosFree = service.findByFree()
+                .stream()
+                .map(VideoDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(videosFree);
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,6 +67,10 @@ public class VideoService {
             throw new ResourceNotFoundException("Resource not found");
         }
         return list;
+    }
+
+    public List<Video> findByFree(){
+        return repository.findByFree();
     }
 
     private Video checkCategory(Video video) {
